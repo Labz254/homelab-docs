@@ -2,7 +2,7 @@
 title: Welcome to Labz254
 description: My homelab journey documenting Proxmox VE virtualization, self-hosted services, and network infrastructure built on enterprise-grade hardware with GNOME desktop integration
 published: true
-date: 2026-09-22T11:53:12.078Z
+date: 2026-09-22T12:01:34.055Z
 tags: introduction, homelab, proxmox, infrastructure, self-hosting, virtualization, documentation, getting-started, architecture, kenya, gnome, mikrotik
 editor: markdown
 dateCreated: 2026-09-22T10:22:24.840Z
@@ -81,3 +81,187 @@ I didn't just buy parts; I engineered a system with redundancy, performance, and
 
 ### 🌐 Network Topology: Streamlined MikroTik Setup
 *A professional-grade network with minimal hardware, maximum performance, fully wired with Cat 6a.*
+
+🌐 ISP Fiber
+↓
+📡 ONT (Optical Network Terminal)
+↓
+Cat 6a Backbone
+↓
+🔴 MikroTik RB5009UPr+S+IN
+(All-in-one: Router + PoE+ Switch + 10G SFP+)
+│
+├── 📡 MikroTik cAP ax
+│ (WiFi 6 Access Point, PoE Powered)
+│
+└── 🖥️ Labz254 Server (3× 1GbE Ports) & Other Devices
+
+
+
+**Network Gear Breakdown:**
+| Device | Model | Function |
+|--------|-------|----------|
+| **Router/Switch** | MikroTik RB5009UPr+S+IN | Core routing, firewall, DHCP, PoE+ switching, and 10G uplinks in one powerful device. |
+| **Wireless** | MikroTik cAP ax | WiFi 6 coverage, powered directly by the RB5009 via PoE for a clean, cable-free setup. |
+| **Server NICs** | HP Z2 G9 Built-in + PCIe Card | 3× 1GbE ports total for network segmentation, VM isolation, and future expansion. |
+
+---
+
+## 🎮 GPU Architecture: Hybrid Host-Based Sharing
+
+### The Smart Approach
+Instead of complex PCIe passthrough to individual VMs, I use a **hybrid host-based GPU sharing** model:
+
+**Host (Proxmox + GNOME) has direct access to:**
+- **NVIDIA RTX 5070** - Primary GPU for AI and compute
+- **Intel UHD Graphics 770** - Secondary GPU for media transcoding
+
+**Services Running on Host with GPU Access:**
+- **Ollama** (RTX 5070) - Running Qwen LLM models for local AI
+- **Frigate** (RTX 5070) - AI-powered object detection for 4 CCTV cameras
+- **Jellyfin** (Intel UHD 770) - Hardware-accelerated media transcoding
+- **n8n** (RTX 5070 via Ollama API) - Workflow automation with AI integration
+
+**Why This Works:**
+✅ **No PCIe Passthrough Complexity** - No IOMMU headaches or VFIO configuration  
+✅ **Efficient Resource Sharing** - Light processes (Frigate 4-cam detection + Jellyfin transcoding) run simultaneously without contention  
+✅ **Dual GPU Load Balancing** - Intel iGPU handles video encoding, RTX 5070 handles AI inference  
+✅ **Simplified Management** - All GPU services in one place, easier to monitor and maintain  
+✅ **Windows VM Flexibility** - Windows VM runs without GPU passthrough for general "Windows stuff"  
+
+> 💡 **Real-World Performance:** Frigate (4 cameras) uses ~300MB VRAM, Jellyfin transcoding uses ~200MB VRAM on Intel iGPU. This leaves the RTX 5070's 12GB VRAM free for Ollama models and n8n AI workflows.
+
+---
+
+## 🗺️ The Virtual Ecosystem (8 VMs)
+
+To maintain security, performance, and easy troubleshooting, I segment my services into **8 dedicated Virtual Machines**. Each VM has a specific role, preventing a single point of failure from taking down the entire lab.
+
+### 🪟 VM 1: Windows Workstation
+**General-purpose Windows environment for Windows-specific tasks.**
+- **Purpose:** Windows-only applications, testing, and general desktop tasks
+- **Configuration:** Lightweight VM without GPU passthrough
+- **Access:** Remote Desktop and VNC
+- **Note:** Separate gaming console used for GPU-intensive gaming to avoid host GPU contention
+
+### 🛡️ VM 2: The Gateway (Edge & Security)
+**The front door to my network.** Handles all incoming traffic, authentication, and intrusion prevention.
+- **Traefik:** Dynamic reverse proxy and load balancer for all services
+- **Authentik:** Centralized Identity Provider (IdP) and Single Sign-On (SSO)
+- **CrowdSec:** Collaborative intrusion prevention system (IPS) to block malicious IPs
+- **Docker Socket Proxy:** Securely exposes Docker API to Traefik without full root access
+- **mkcert & Alloy:** Local TLS certificates and centralized log/metric shipping
+
+###  VM 3: The Network Controller
+**Manages internal routing, DNS filtering, and secure remote access.**
+- **AdGuard Home:** Network-wide ad, tracker, and phishing protection via DNS
+- **Headscale:** Open-source, self-hosted Tailscale control server for secure remote access
+- **Headplane:** Modern web UI for managing Headscale configuration
+- **mkcert & Alloy:** Local TLS and logging
+
+###  VM 4: The Observatory (Monitoring)
+**The eyes and ears of the homelab.** If something breaks, this VM tells me about it.
+- **Prometheus:** Time-series database for scraping metrics from all services
+- **Grafana:** Beautiful dashboards visualizing Prometheus and Loki data
+- **Loki:** Aggregates and stores logs from all containers for analysis
+- **Uptime Kuma:** Fancy, self-hosted monitoring tool with beautiful status pages
+- **pve-exporter:** Scrapes Proxmox VE host metrics (CPU, RAM, VM status) for Grafana
+- **mkcert & Alloy:** Local TLS and logging
+
+### 💾 VM 5: Core Storage & Productivity
+**The digital vault for personal data, passwords, and documentation.**
+- **Nextcloud:** Self-hosted cloud storage, calendar, contacts, and collaboration
+- **Immich:** High-performance, self-hosted photo and video backup
+- **Vaultwarden:** Lightweight, self-hosted Bitwarden-compatible password manager
+- **Wiki.js:** This documentation site!
+- **Vikunja:** Self-hosted task management and to-do application
+- **Caddy:** Web server with automatic HTTPS and reverse proxy
+- **mkcert & Alloy:** Local TLS and logging
+
+### 🎬 VM 6: Media & Entertainment Hub
+**The family entertainment center, fully automated.**
+- **Jellyfin:** Media server with hardware-accelerated transcoding (Intel UHD 770 on host)
+- **The *Arr Stack:** Sonarr (TV), Radarr (Movies), Lidarr (Music), Readarr (Books), Prowlarr (Indexers), Bazarr (Subtitles)
+- **Seerr:** Modern, beautiful request management interface for family and friends
+- **qBittorrent:** Secure, automated torrent downloading
+- **mkcert & Alloy:** Local TLS and logging
+
+### 🤖 VM 7: Automation & AI
+**Where the magic happens.** Workflows, local AI, and smart integrations.
+- **n8n:** Powerful, node-based workflow automation tool
+- **Evolution-API:** WhatsApp and messaging API integration for custom notifications/bots
+- **SearXNG:** Privacy-respecting, self-hosted metasearch engine
+- **Ollama API Calls:** Connects to host-based Ollama for local LLM inference (RTX 5070)
+- **Alloy:** Monitoring and logging
+
+### 🏠 VM 8: Smart Home Hub
+**The brain of the physical house.**
+- **Home Assistant (HAOS):** Running as a full, dedicated Virtual Machine (not a container) to ensure direct hardware access for Zigbee/Z-Wave dongles and maximum stability for home automation rules
+
+---
+
+## 🚀 Current Service Stack Overview
+
+I currently run **30+ services** across 8 VMs + host containers to automate my life, entertain my family, and learn cutting-edge technologies:
+
+| Category | Services | Count |
+|----------|----------|-------|
+|  **Security & Identity** | Authentik, Vaultwarden, CrowdSec, AdGuard Home | 4 |
+| 🎬 **Media & Entertainment** | Jellyfin, Sonarr, Radarr, Lidarr, Readarr, Prowlarr, Bazarr, Seerr, qBittorrent | 9 |
+| ☁️ **Cloud & Productivity** | Nextcloud, Immich, Wiki.js, Vikunja | 4 |
+| 📊 **Monitoring** | Grafana, Prometheus, Loki, Uptime Kuma, pve-exporter, Alloy (×8) | 12 |
+| 🤖 **AI & Automation** | Ollama (Host), n8n, Evolution-API | 3 |
+| 🏠 **Home Automation** | Home Assistant | 1 |
+| 🌐 **Networking & Proxy** | Traefik, Headscale, Headplane, SearXNG, Caddy, Docker Socket Proxy | 6 |
+| 🔧 **Infrastructure** | mkcert (×8 VMs), Frigate (Host) | 9 |
+
+**Total Services:** 40+ across 8 VMs + host
+
+---
+
+##  How to Use This Wiki & What's Next
+
+This documentation is designed to be a **living, breathing guide**. Here is how to navigate it:
+
+- 📖 **Setup Guides:** Step-by-step commands and configurations (copy-paste ready).
+- 🔧 **Troubleshooting:** Real-world errors I faced, the logs I checked, and how I fixed them.
+- 🏗️ **Architecture:** Diagrams explaining how the network, VMs, and services communicate.
+- 🛡️ **Security:** Best practices for hardening self-hosted services and managing secrets.
+
+> 💡 **Pro Tip:** All documentation is written in Markdown and automatically synced via Git to my [GitHub Repository](https://github.com/Labz254/homelab-docs) for version control, backup, and public viewing.
+
+### 🎯 Upcoming Documentation Phases
+Now that you know the **what** and the **why**, the upcoming sections will dive into the **how**:
+1. **Phase 1:** Proxmox Installation & System Hardening
+2. **Phase 2:** Creating a Secure Non-Root Admin User (`cannz`)
+3. **Phase 3:** Safely Installing GNOME on the Proxmox Host
+4. **Phase 4:** Post-Reboot System Verification Checklist
+5. **Phase 5:** Docker & Container Deployment (The 8 VMs + Host Services)
+
+---
+
+## 🙏 Acknowledgments
+
+This homelab journey would not have been possible without:
+- **AI Assistance:** ChatGPT, Claude, and other AI models for troubleshooting and guidance
+- **Online References:** Proxmox documentation, Linux man pages, and community forums
+- **Online Media:** YouTube tutorials, technical blogs, and homelab communities
+- **Open Source Community:** The incredible developers behind all the self-hosted services I use
+
+---
+
+## 📞 Connect & Contribute
+
+This lab is a continuous work in progress. Found a mistake? Have a better way to do something? 
+- **GitHub Issues:** Open an issue on the repository.
+- **Discussions:** Start a conversation about improvements.
+- **Pull Requests:** Submit your own documentation enhancements.
+
+---
+
+**Built with ❤️, caffeine, and late-night terminal sessions in Kenya | 2025**
+
+*"The only way to do great work is to love what you do." — Steve Jobs*
+
+---
+*Last Updated: September 2025 | Wiki.js Version: 2.x | Proxmox VE: 9.x*
