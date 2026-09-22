@@ -2,7 +2,7 @@
 title: Welcome to Labz254
 description: My homelab journey documenting Proxmox VE virtualization, self-hosted services, and network infrastructure built on enterprise-grade hardware with GNOME desktop integration
 published: true
-date: 2026-09-22T10:22:24.840Z
+date: 2026-09-22T11:53:12.078Z
 tags: introduction, homelab, proxmox, infrastructure, self-hosting, virtualization, documentation, getting-started, architecture, kenya, gnome, mikrotik
 editor: markdown
 dateCreated: 2026-09-22T10:22:24.840Z
@@ -38,6 +38,8 @@ Instead of sacrificing the hypervisor's power or buying a second machine, I brid
 3. **Automation Over Manual Work:** If I do it twice, I automate it.
 4. **Self-Hosted Freedom:** No cloud dependencies. My data, my control.
 5. **Documentation is King:** If it is not documented, it does not exist.
+6. **Learn by Doing:** Every error is a learning opportunity.
+7. **Community Giving:** Everything is open-source and shareable.
 
 ---
 
@@ -51,8 +53,10 @@ I didn't just buy parts; I engineered a system with redundancy, performance, and
 |-----------|---------------|----------------|
 | **CPU** | Intel Core i9-14900K | Massive core count for concurrent VMs, plus high single-thread speed for responsive desktop use. |
 | **RAM** | 32GB DDR4 3200MHz | The sweet spot for running 30+ lightweight containers and several heavier VMs simultaneously. |
-| **GPU** | NVIDIA RTX 5070 12GB | Future-proofing for local AI workloads (Ollama) and hardware-accelerated media transcoding (Jellyfin). |
+| **GPU (Dedicated)** | NVIDIA RTX 5070 12GB | Dedicated to host for AI workloads (Ollama Qwen models), Frigate AI detection, and media transcoding. |
+| **GPU (Integrated)** | Intel UHD Graphics 770 | Handles Jellyfin hardware transcoding independently, sharing the load with the RTX 5070. |
 | **PSU** | 700W | Highly efficient power delivery to handle transient CPU/GPU spikes without breaking a sweat. |
+| **Network** | 3× 1GbE Ports | Expanded from default with additional PCIe network card for network segmentation and redundancy. |
 
 ### 💾 Storage Architecture: Redundancy First
 *Data loss is not an option. All storage arrays are configured in **RAID 1 (Mirror)** for maximum safety.*
@@ -60,10 +64,20 @@ I didn't just buy parts; I engineered a system with redundancy, performance, and
 | Array Purpose | Drive Configuration | Role in the Lab |
 |---------------|---------------------|-----------------|
 | **OS & Virtual Machines** | 2× 1TB NVMe Gen 4 | Blazing fast I/O for Proxmox host, VM disks, and container volumes. |
-| **Media & Cloud Data** | 2× **2TB** SATA SSD | Silent, fast, and reliable access for Nextcloud, Immich, and Jellyfin libraries. |
-| **Surveillance Footage** | 2× **2TB** HDD | High-capacity, continuous-write optimization for 24/7 CCTV recording. |
+| **Media & Cloud Data** | 2× 2TB SATA SSD | Silent, fast, and reliable access for Nextcloud, Immich, and Jellyfin libraries. |
+| **Surveillance Footage** | 2× 2TB HDD | High-capacity, continuous-write optimization for 24/7 CCTV recording. |
+| **External Backup** | 1× 2TB External HDD | Emergency backup and disaster recovery for critical configurations and data. |
 
-> 💡 **Total Usable Storage:** ~5TB across three fully redundant arrays.
+> 💡 **Total Usable Storage:** ~5TB across three fully redundant arrays + 2TB external backup.
+
+### 🔌 Power Protection: LightWave UPS
+*Clean power is non-negotiable for data integrity and hardware longevity.*
+
+| Device | Specification | Purpose |
+|--------|---------------|---------|
+| **UPS** | LightWave 1.5KVA (900W) with AVR | Protects against power outages, surges, and voltage fluctuations. Provides graceful shutdown capability and runtime during brief outages. |
+
+> ⚡ **Why 1.5KVA?** Provides sufficient wattage (900W) to handle the 700W PSU load plus overhead for safe operation and battery runtime.
 
 ### 🌐 Network Topology: Streamlined MikroTik Setup
 *A professional-grade network with minimal hardware, maximum performance, fully wired with Cat 6a.*
