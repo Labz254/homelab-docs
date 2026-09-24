@@ -2,7 +2,7 @@
 title: Welcome to Labz254
 description: My homelab journey documenting Proxmox VE virtualization, self-hosted services, and network infrastructure built on enterprise-grade hardware with GNOME desktop integration
 published: true
-date: 2026-09-24T20:13:54.700Z
+date: 2026-09-24T20:15:13.740Z
 tags: introduction, homelab, proxmox, infrastructure, self-hosting, virtualization, documentation, getting-started, architecture, kenya, gnome, mikrotik
 editor: markdown
 dateCreated: 2026-09-22T10:22:24.840Z
@@ -111,7 +111,7 @@ I didn't just buy parts; I engineered a system with redundancy, performance, and
   │                            │                           │
   ▼ PoE+                       ▼ Cat 6a                    ▼ PoE+
 ┌──────────────────┐  ┌──────────────────────┐  ┌──────────────────────┐
-│ 📡 MikroTik cAP ax│  │ 🖥️ Proxmox Server    │  │ 📹 4× Reolink CX410 │
+│📡 MikroTik cAP ax│  │ 🖥️ Proxmox Server    │  │ 📹 4× Reolink CX410  │
 │ (WiFi 6 / PoE)   │  │ (HP Z2 G9 / 3× 1GbE) │  │ (PoE IP Cameras)     │
 └──────────────────┘  └──────────────────────┘  └──────────────────────┘
 ```
