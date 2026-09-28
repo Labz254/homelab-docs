@@ -1,8 +1,8 @@
 ---
-title: Phase 1: BIOS Setup & Preparation
+title: Phase 1 - BIOS Setup & Preparation
 description: Updating the HP Z2 G9 BIOS and configuring hardware settings for Proxmox VE virtualization.
 published: true
-date: 2026-09-28T13:56:17.414Z
+date: 2026-09-28T14:04:05.004Z
 tags: phase-1, bios, hp-z2-g9, proxmox, hardware, setup
 editor: markdown
 dateCreated: 2026-09-28T13:56:17.414Z
