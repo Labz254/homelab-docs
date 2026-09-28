@@ -2,7 +2,7 @@
 title: Welcome to Labz254
 description: My homelab journey documenting Proxmox VE virtualization, self-hosted services, and network infrastructure built on enterprise-grade hardware with GNOME desktop integration
 published: true
-date: 2026-09-24T20:15:13.740Z
+date: 2026-09-28T13:27:53.987Z
 tags: introduction, homelab, proxmox, infrastructure, self-hosting, virtualization, documentation, getting-started, architecture, kenya, gnome, mikrotik
 editor: markdown
 dateCreated: 2026-09-22T10:22:24.840Z
@@ -151,23 +151,30 @@ Instead of complex PCIe passthrough to individual VMs, I keep the **NVIDIA RTX 5
 
 ## 🗺️ The Virtual Ecosystem (9 VMs)
 
-To maintain security, performance, and easy troubleshooting, I segment my services into **9 dedicated Virtual Machines**. Each VM has a specific role, preventing a single point of failure from taking down the entire lab.
+To maintain security, performance, and easy troubleshooting, I segment my services into **9 dedicated Virtual Machines**. Each VM has a specific role, preventing a single point of failure from taking down the entire lab.0.
 
 ### 🪟 VM 1: Windows Workstation
 **General-purpose Windows environment for Windows-specific tasks.**
-- **Purpose:** Windows-only applications, testing, and general desktop tasks
-- **Configuration:** Lightweight VM without GPU passthrough
-- **Access:** Remote Desktop and VNC
-- **Note:** Separate gaming console used for GPU-intensive gaming to avoid host GPU contention
+- **Purpose:** Windows-only applications, testing, and general desktop tasks.
+- **Configuration:** Lightweight VM without GPU passthrough.
+- **Access:** Remote Desktop and VNC.
+- **Note:** Separate gaming console used for GPU-intensive gaming to avoid host GPU contention.
 
 ### 🐧 VM 2: Ubuntu Desktop
 **Linux development and testing environment.**
-- **Purpose:** Software development, Linux-specific applications, and testing
-- **Configuration:** Full desktop environment with development tools
-- **Access:** SPICE/VNC and SSH
-- **Use Cases:** VS Code development, Docker testing, Linux application testing
+- **Purpose:** Software development, Linux-specific applications, and testing.
+- **Configuration:** Full desktop environment with development tools.
+- **Access:** SPICE/VNC and SSH.
+- **Use Cases:** VS Code development, Docker testing, Linux application testing.
 
-### 🛡️ VM 3: The Gateway (Edge & Security)
+### 🐉 VM 3: Kali Linux (Penetration Testing & Security)
+**Dedicated environment for cybersecurity and network auditing.**
+- **Purpose:** Ethical hacking, vulnerability assessments, and internal security testing.
+- **Configuration:** Lightweight VM with strictly isolated network access.
+- **Access:** SSH and VNC/SPICE.
+- **Use Cases:** Internal security audits, testing OPNsense firewall rules, and learning cybersecurity tools.
+
+### 🛡️ VM 4: The Gateway (Edge & Security)
 **The front door to my network.** Handles all incoming traffic, authentication, and intrusion prevention.
 - **OPNsense:** Firewall, routing, and advanced network security.
 - **Traefik:** Dynamic reverse proxy and load balancer for all services.
@@ -176,14 +183,14 @@ To maintain security, performance, and easy troubleshooting, I segment my servic
 - **Docker Socket Proxy:** Securely exposes Docker API to Traefik without full root access.
 - **mkcert & Alloy:** Local TLS certificates and centralized log/metric shipping.
 
-### 🌐 VM 4: The Network Controller
+### 🌐 VM 5: The Network Controller
 **Manages internal routing, DNS filtering, and secure remote access.**
 - **AdGuard Home:** Network-wide ad, tracker, and phishing protection via DNS.
 - **Headscale:** Open-source, self-hosted Tailscale control server for secure remote access.
 - **Headplane:** Modern web UI for managing Headscale configuration.
 - **mkcert & Alloy:** Local TLS and logging.
 
-### 📊 VM 5: The Observatory (Monitoring)
+### 📊 VM 6: The Observatory (Monitoring)
 **The eyes and ears of the homelab.** If something breaks, this VM tells me about it.
 - **Prometheus:** Time-series database for scraping metrics from all services.
 - **Grafana:** Beautiful dashboards visualizing Prometheus and Loki data.
@@ -192,7 +199,7 @@ To maintain security, performance, and easy troubleshooting, I segment my servic
 - **pve-exporter:** Scrapes Proxmox VE host metrics (CPU, RAM, VM status) for Grafana.
 - **mkcert & Alloy:** Local TLS and logging.
 
-### 💾 VM 6: Core Storage & Productivity
+### 💾 VM 7: Core Storage & Productivity
 **The digital vault for personal data, passwords, and documentation.**
 - **Frigate:** AI-powered NVR and object detection for the 4× Reolink CX410 cameras.
 - **Nextcloud:** Self-hosted cloud storage, calendar, contacts, and collaboration.
@@ -203,7 +210,7 @@ To maintain security, performance, and easy troubleshooting, I segment my servic
 - **Caddy:** Web server with automatic HTTPS and reverse proxy.
 - **mkcert & Alloy:** Local TLS and logging.
 
-### 🎬 VM 7: Media & Entertainment Hub
+### 🎬 VM 8: Media & Entertainment Hub
 **The family entertainment center, fully automated.**
 - **Jellyfin:** Media server with hardware-accelerated transcoding (Intel UHD 770 on host).
 - **The *Arr Stack:** Sonarr (TV), Radarr (Movies), Lidarr (Music), Readarr (Books), Prowlarr (Indexers), Bazarr (Subtitles).
@@ -211,7 +218,7 @@ To maintain security, performance, and easy troubleshooting, I segment my servic
 - **qBittorrent:** Secure, automated torrent downloading.
 - **mkcert & Alloy:** Local TLS and logging.
 
-### 🤖 VM 8: Automation & AI
+### 🤖 VM 9: Automation & AI
 **Where the magic happens.** Workflows, local AI, and smart integrations.
 - **n8n:** Powerful, node-based workflow automation tool.
 - **Evolution-API:** WhatsApp and messaging API integration for custom notifications/bots.
@@ -219,7 +226,7 @@ To maintain security, performance, and easy troubleshooting, I segment my servic
 - **Ollama API Calls:** Connects to host-based Ollama for local LLM inference (RTX 5070).
 - **Alloy:** Monitoring and logging.
 
-### 🏠 VM 9: Smart Home Hub
+### 🏠 VM 10: Smart Home Hub
 **The brain of the physical house.**
 - **Home Assistant (HAOS):** Running as a full, dedicated Virtual Machine (not a container) to ensure direct hardware access for Zigbee/Z-Wave dongles and maximum stability for home automation rules.
 
@@ -259,56 +266,42 @@ This documentation is designed to be a **living, breathing guide**. Here is how 
 
 ## 🎯 Documentation Roadmap
 
-Now that you know the **what** and the **why**, the upcoming sections will dive into the **how**:
+Now that you know the **what** and the **why**, the upcoming sections will dive into the **how**. This documentation is structured as a step-by-step journey from bare metal to a fully automated homelab:
 
-### **Phase 1:** Proxmox Installation & System Hardening
-- Initial Proxmox VE installation
-- Network configuration
-- Storage setup (RAID 1 arrays)
-- System updates and security hardening
+### **Phase 1: BIOS Setup & Preparation**
+- Required BIOS settings to enable/disable (Virtualization, Secure Boot, Fast Boot).
+- Hardware compatibility checks to ensure a smooth Proxmox VE installation.
 
-### **Phase 2:** Creating a Secure Non-Root Admin User (`cannz`)
-- Why you should never use root for daily tasks
-- Creating the `cannz` user
-- Configuring sudo privileges
-- Testing administrative access
+### **Phase 2: Proxmox Installation**
+- Downloading the Proxmox ISO and creating a bootable USB drive using Ventoy.
+- Step-by-step installation walkthrough.
+- Initial storage configuration: Setting up the first RAID 1 array for the 2× 1TB NVMe drives to host the Proxmox OS.
 
-### **Phase 3:** Safely Installing GNOME on the Proxmox Host
-- Installing `task-gnome-desktop` and `gdm3`
-- Ensuring Proxmox services remain unaffected
-- Configuring display manager and boot targets
-- Desktop customization with GNOME Tweaks
+### **Phase 3: Creating a Secure Non-Root Admin User (`cannz`)**
+- Performing a full system update.
+- Creating the `cannz` user and configuring `sudo` privileges.
+- Verifying administrative access (preparing for restricted root login post-GNOME installation).
 
-### **Phase 4:** Post-Reboot System Verification Checklist
-- Kernel verification
-- Service health checks
-- Network connectivity tests
-- Web interface validation
-- Initial configuration backup
+### **Phase 4: Safely Installing GNOME on the Proxmox Host**
+- Installing `task-gnome-desktop` and `gdm3`.
+- Ensuring core Proxmox services (`pveproxy`, `pve-cluster`, `pvedaemon`) remain completely unaffected.
+- Configuring the display manager and default graphical boot targets.
 
-### **Phase 5:** System Setup & Hardening
-- Firewall configuration (UFW/nftables)
-- Network segmentation
-- SSH hardening
-- Fail2ban setup
-- Security best practices
+### **Phase 5: Post-Reboot Verification & System Hardening**
+- Kernel verification and system health checks.
+- Network configuration and connectivity tests.
+- Storage setup: Configuring ZFS RAID 1 arrays for the remaining drives (2× 2TB SSD, 2× 2TB HDD).
+- Security hardening: Firewall configuration (UFW/nftables), SSH hardening, and Fail2ban setup.
 
-### **Phase 6:** Essential Desktop Applications
-- Shutter Encoder (video encoding)
-- VLC Media Player
-- Visual Studio Code
-- btop (system monitoring)
-- Additional productivity tools
+### **Phase 6: Essential Desktop Applications & Drivers**
+- Downloading and installing necessary hardware drivers (e.g., NVIDIA GPU drivers).
+- Installing productivity and monitoring tools: Shutter Encoder, VLC, Visual Studio Code, and `btop`.
 
-### **Phase 7:** The 9 VMs + Docker Deployment
-- Docker installation and configuration
-- Docker Compose setup
-- Deploying all 9 VMs with their respective services
-- Network segmentation and security
-- Host services setup (Ollama, Frigate, Jellyfin, n8n)
-
----
-
+### **Phase 7: The 9 VMs + Docker Deployment**
+- VM creation, OS installation, and network/security segmentation.
+- Docker and Docker Compose installation and configuration.
+- Deploying all 9 VMs with their respective services.
+- Setting up host-level services (Ollama, Frigate, Jellyfin, n8n).
 ## 🙏 Acknowledgments
 
 This homelab journey would not have been possible without:
@@ -329,7 +322,7 @@ This lab is a continuous work in progress. Found a mistake? Have a better way to
 
 ---
 
-**Built with ❤️, caffeine, and late-night terminal sessions in Kenya | 2026**
+**Built with ❤️, lemonade, and late-night terminal sessions in Kenya | 2026**
 
 *"The only way to do great work is to love what you do."* — Steve Jobs
 
