@@ -55,6 +55,13 @@ This repository documents my journey building a complex, 10-VM virtualized ecosy
 
 ---
 
+## 🗂️ Project Tracking
+I plan and track all documentation work publicly: **[Homelab Docs Roadmap](https://github.com/users/Labz254/projects/1)**
+
+Watch how I break down complex infrastructure projects into actionable phases, track progress, and ship documentation like a professional engineering team.
+
+---
+
 🤝 **Let's Connect:** I'm actively looking for my next challenge. Feel free to reach out via email or on [LinkedIn](https://linkedin.com/in/ian-mucheru).
 
 *Built with ❤️, caffeine, and late-night terminal sessions in Kenya | 2026*
