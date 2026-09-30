@@ -1,68 +1,60 @@
-#  Labz254 Homelab Documentation
+# 👋 Hi, I'm Ian Mucheru (Labz254)
 
-> *"Building the future, one VM at a time."* 🇰🇪
-
-This repository contains the source Markdown files for the **Labz254 Wiki**, a comprehensive documentation of my personal homelab journey. It covers everything from bare-metal BIOS configuration to deploying a complex, 10-VM virtualized ecosystem on Proxmox VE.
-
-> 🌐 **Live Documentation:** [Visit the Labz254 Wiki](https://wiki.home.tail/en/home)
+**Infrastructure Engineer | DevOps Enthusiast | Linux & Network Security Advocate**  
+📍 Kenya | 🌐 Open to Remote & Hybrid Roles | ✉️ ianmucheru.lab@gmail.com  
 
 ---
 
-## ️ The Hardware Arsenal
+## 🎯 About Me
+I am a hands-on Infrastructure Engineer passionate about building, securing, and documenting enterprise-grade systems. My journey is defined by relentless self-teaching and practical application. I specialize in virtualization, network security, and automation, transforming standard hardware into robust, self-hosted environments. 
 
-This entire ecosystem runs on a single, powerful workstation acting as a Type-1 hypervisor, paired with enterprise-grade networking.
-
-| Component | Specification |
-|-----------|---------------|
-| **Workstation** | HP Z2 G9 Tower |
-| **CPU** | Intel Core i9-14900K |
-| **RAM** | 32GB DDR4 3200MHz |
-| **GPU** | NVIDIA RTX 5070 12GB (Host) + Intel UHD 770 (Transcoding) |
-| **Storage** | 2x 1TB NVMe (OS/VMs), 2x 2TB SSD (Media), 2x 2TB HDD (CCTV) |
-| **Network** | MikroTik RB5009UPr+S+IN (Router/Switch) + cAP ax (WiFi 6) |
-| **Surveillance** | 4x Reolink CX410 4K PoE Cameras |
+I am actively seeking opportunities in:
+- ✅ **DevOps / Cloud Infrastructure**
+- ✅ **Cybersecurity** (SOC Analyst, Network Security)
+- ✅ **Linux System Administration**
+- ✅ **Network Engineering**
 
 ---
 
-## 🗺️ The Virtual Ecosystem (10 VMs)
-
-To maintain security and stability, services are segmented across 10 dedicated Virtual Machines:
-
-1.  ** Windows Workstation:** General-purpose Windows tasks.
-2.  **🐧 Ubuntu Desktop:** Linux development and testing.
-3.  ** Kali Linux:** Penetration testing and security auditing.
-4.  **🛡️ Gateway (OPNsense):** Firewall, Traefik, Authentik, CrowdSec.
-5.  ** Network Controller:** AdGuard Home, Headscale.
-6.  **📊 Observatory:** Prometheus, Grafana, Loki, Uptime Kuma.
-7.  **💾 Storage & Productivity:** Frigate (NVR), Nextcloud, Immich, Vaultwarden, Wiki.js.
-8.  **🎬 Media Hub:** Jellyfin, *Arr Stack, Seerr.
-9.  ** Automation & AI:** n8n, Ollama (Local LLMs), SearXNG.
-10. **🏠 Smart Home:** Home Assistant (HAOS).
+## 🛠️ Core Competencies & Tech Stack
+- **Virtualization & OS:** Proxmox VE, Debian/Ubuntu, Windows, Docker, LXC
+- **Networking & Security:** MikroTik RouterOS, OPNsense, Traefik, VLANs, CrowdSec, Authentik (SSO)
+- **Monitoring & Observability:** Prometheus, Grafana, Loki, Uptime Kuma
+- **Automation & AI:** n8n, Bash scripting, Git, Ollama (Local LLMs)
+- **Storage & Data:** ZFS (RAID 1), Nextcloud, Immich, Frigate NVR
 
 ---
 
-## 📖 Documentation Roadmap
+## 🏠 The Labz254 Project: My Living Portfolio
+*"Building the future, one VM at a time."* 🇰🇪
 
-This wiki is structured as a step-by-step guide to replicating this setup:
+This repository documents my journey building a complex, 10-VM virtualized ecosystem on a single Type-1 hypervisor. It serves as proof of my ability to design, troubleshoot, and maintain production-like environments from bare metal up.
 
-*   **Phase 1:** BIOS Setup & Preparation
-*   **Phase 2:** Proxmox Installation (ZFS RAID 1)
-*   **Phase 3:** Secure Non-Root Admin User Setup
-*   **Phase 4:** GNOME Desktop Installation on Proxmox Host
-*   **Phase 5:** Post-Reboot Verification & System Hardening
-*   **Phase 6:** Essential Desktop Applications & Drivers
-*   **Phase 7:** The 10 VMs + Docker Deployment
+**⚙️ The Hardware Arsenal**
+- **Host:** HP Z2 G9 Tower | Intel Core i9-14900K | 32GB DDR4
+- **GPU:** NVIDIA RTX 5070 12GB (Host AI/Desktop) + Intel UHD 770 (Transcoding)
+- **Storage:** ZFS RAID 1 Arrays (2x 1TB NVMe, 2x 2TB SSD, 2x 2TB HDD)
+- **Network:** MikroTik RB5009UPr+S+IN (Router/PoE+ Switch) + cAP ax (WiFi 6)
+
+**🗺️ The 10-VM Ecosystem**
+1. **Windows & Ubuntu Desktop:** Daily driver and Linux development.
+2. **Kali Linux:** Penetration testing and security auditing.
+3. **Gateway:** OPNsense, Traefik, Authentik, CrowdSec.
+4. **Network Controller:** AdGuard Home, Headscale.
+5. **Observatory:** Prometheus, Grafana, Loki, Uptime Kuma.
+6. **Storage & Productivity:** Frigate, Nextcloud, Immich, Vaultwarden, Wiki.js.
+7. **Media Hub:** Jellyfin, *Arr Stack, Seerr.
+8. **Automation & AI:** n8n, Ollama, SearXNG.
+9. **Smart Home:** Home Assistant (HAOS).
 
 ---
 
-## 🤝 Contributing
-
-This is a personal documentation project, but if you spot a typo or have a suggestion for a better configuration, feel free to open an Issue or submit a Pull Request.
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+## 📚 Documentation & Resources
+- 🌐 **[Live Homelab Wiki](https://wiki.home.tail)**: Step-by-step guides, troubleshooting, and architecture diagrams.
+- 📂 **[homelab-docs](https://github.com/Labz254/homelab-docs)**: Source markdown for the wiki.
 
 ---
 
-**Built with ❤️ in Kenya | 2026**
+🤝 **Let's Connect:** I'm actively looking for my next challenge. Feel free to reach out via email or on [LinkedIn](https://linkedin.com/in/ian-mucheru).
+
+*Built with ❤️, caffeine, and late-night terminal sessions in Kenya | 2026*
