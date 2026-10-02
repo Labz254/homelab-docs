@@ -2,7 +2,7 @@
 title: Phase 5d - SSH Hardening
 description: Securing SSH with key-based authentication, disabling root login, and changing the default port.
 published: true
-date: 2026-10-02T19:10:59.612Z
+date: 2026-10-02T19:13:22.815Z
 tags: phase-5, phase-5d, ssh, security, hardening, proxmox
 editor: markdown
 dateCreated: 2026-10-02T19:10:59.612Z
@@ -175,30 +175,6 @@ Only once this succeeds should you close your original session.
 > <br><br>
 > If you have no sessions open at all, you'll need console/physical access (keyboard + monitor, or the Proxmox host console) to fix `/etc/ssh/sshd_config` and `/etc/pve/nodes/<node>/host.fw` directly.
 > </details>
-
----
-
-## 🧱 Step 10: (Optional) Add an SSH Jail to Fail2ban
-
-If you installed `fail2ban` in Phase 5c, enable its SSH jail to automatically block repeated failed login attempts:
-
-```bash
-sudo nano /etc/fail2ban/jail.local
-```
-
-```text
-[sshd]
-enabled = true
-port = 2222
-maxretry = 5
-bantime = 1h
-```
-
-Then restart:
-
-```bash
-sudo systemctl restart fail2ban
-```
 
 ---
 
