@@ -2,7 +2,7 @@
 title: Phase 5d - SSH Hardening
 description: Securing SSH with key-based authentication, disabling root login, and changing the default port.
 published: true
-date: 2026-10-02T19:13:22.815Z
+date: 2026-10-02T19:13:33.894Z
 tags: phase-5, phase-5d, ssh, security, hardening, proxmox
 editor: markdown
 dateCreated: 2026-10-02T19:10:59.612Z
