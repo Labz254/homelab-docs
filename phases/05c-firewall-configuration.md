@@ -2,7 +2,7 @@
 title: Phase 5c - Firewall Configuration
 description: Configuring UFW (Uncomplicated Firewall) to secure the Proxmox host by restricting unnecessary inbound traffic.
 published: true
-date: 2026-10-02T17:29:38.422Z
+date: 2026-10-02T19:14:30.300Z
 tags: phase-5, phase-5c, firewall, ufw, security, proxmox, hardening
 editor: markdown
 dateCreated: 2026-10-02T17:29:38.422Z
@@ -181,16 +181,7 @@ Watch for `DROP` entries from unexpected sources, and `ACCEPT` entries for your 
 
 ## 🧱 Step 9: (Optional) Host-Level Hardening Beyond the Proxmox Firewall
 
-The Proxmox firewall manages `nftables` for you, so manually adding raw `iptables`/`nftables` rules alongside it is not recommended — the two can conflict. If you want extra protection beyond firewall rules, consider:
-
-- **Fail2ban** for SSH brute-force protection:
-
-```bash
-sudo apt install fail2ban
-sudo systemctl enable --now fail2ban
-```
-
-- Restricting SSH to key-based authentication only (covered in a future sub-phase: SSH Hardening)
+The Proxmox firewall manages `nftables` for you, so manually adding raw `iptables`/`nftables` rules alongside it is not recommended — the two can conflict. Further intrusion-prevention (e.g. CrowdSec) is covered in a later sub-phase.
 
 ---
 
