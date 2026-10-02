@@ -2,7 +2,7 @@
 title: Phase 5c - Firewall Configuration
 description: Configuring UFW (Uncomplicated Firewall) to secure the Proxmox host by restricting unnecessary inbound traffic.
 published: true
-date: 2026-10-02T19:14:30.300Z
+date: 2026-10-02T19:14:34.929Z
 tags: phase-5, phase-5c, firewall, ufw, security, proxmox, hardening
 editor: markdown
 dateCreated: 2026-10-02T17:29:38.422Z
