@@ -2,7 +2,7 @@
 title: Phase 5a - After Reboot System Check
 description: Verifying kernel, services, storage, memory, and the Proxmox web UI after the GNOME install reboot.
 published: true
-date: 2026-10-02T16:58:00.744Z
+date: 2026-10-02T17:10:15.514Z
 tags: phase-5, phase-5.1, system-check, proxmox, verification
 editor: markdown
 dateCreated: 2026-10-02T16:58:00.744Z
